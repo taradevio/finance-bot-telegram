@@ -8,6 +8,8 @@ bot.start((ctx) => ctx.reply('Welcome to Finance Tracker'));
 
 bot.command('income', (ctx) => ctx.reply('Add your income'))
 bot.command('outcome', (ctx) => ctx.reply('What did you spend on today?'))
+bot.command('outcome', (ctx) => ctx.reply('What did you spend on today?'))
+
 
 
 // bot.help((ctx) => ctx.reply('Send me a sticker'))
