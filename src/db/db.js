@@ -41,6 +41,8 @@ const newUser = [
   ["002", "patriarch_opel"],
   ["003", "point_coffee"],
   ["004", "moklet_telkom"],
+  ["005", "jolly_bear"],
+
 ];
 
 for (const [telegram_id, username] of newUser) {
