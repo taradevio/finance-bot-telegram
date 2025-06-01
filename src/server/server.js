@@ -1,20 +1,45 @@
-import { Telegraf } from "telegraf";
-import { message } from "telegraf/filters";
-import 'dotenv/config'
+import { Scenes, session, Telegraf } from "telegraf";
+import { addIncome } from "../controller/userTransactions.js";
+import "dotenv/config";
 
-const bot = new Telegraf(process.env.BOT_API_TOKEN)
+const bot = new Telegraf(process.env.BOT_API_TOKEN);
 
-bot.start((ctx) => ctx.reply('Welcome to Finance Tracker'));
+// create a stage
+const scene = new Scenes.Stage([addIncome]);
 
-bot.command('income', (ctx) => ctx.reply('Add your income'))
-bot.command('outcome', (ctx) => ctx.reply('What did you spend on today?'))
-bot.command('outcome', (ctx) => ctx.reply('What did you spend on today?'))
+bot.use(session());
+bot.use(scene.middleware());
 
+bot.start((ctx) => {
+  console.log("start is running!");
+  ctx.reply(
+    "Welcome to Finance Tracker. If you would like to add your income, type '/income'"
+  );
+});
 
+// bot.command("/type", (ctx) => {
+//   console.log("ctx is received");
+//   ctx.reply(
+//     "Use /income to input your income. Use /outcome to input your outcome"
+//   );
+// });
+bot.command("income", (ctx) => {
+  console.log("income is running");
+  ctx.scene.enter("user-transaction");
+});
 
-// bot.help((ctx) => ctx.reply('Send me a sticker'))
-// bot.on(message('sticker'), (ctx) => ctx.reply('👍'))
-// bot.hears('hi', (ctx) => ctx.reply('Hey there'))
-bot.launch()
+bot.command("report", (ctx) => {
+  ctx.reply(
+    `INCOME: ${ctx.session.amount}, 
+    CATEGORY: ${ctx.session.category}, 
+    NOTE: ${ctx.session.note}`
+  );
+});
+// bot.command("/type-income", (ctx) =>
+//   ctx.reply("What is your income type? e. g passive, active ")
+// );
+// bot.command("/outcome", (ctx) => ctx.reply("What did you spend on today?"));
 
-console.log("Bot is running on polling...")
+bot.launch();
+
+console.log("Bot is running on polling...");
