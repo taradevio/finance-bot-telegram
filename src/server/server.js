@@ -7,7 +7,10 @@ const bot = new Telegraf(process.env.BOT_API_TOKEN);
 // create a stage
 const scene = new Scenes.Stage([addIncome]);
 
+// use session to store temp memory of the scene
 bot.use(session());
+
+// use middleware to handle scene
 bot.use(scene.middleware());
 
 bot.start((ctx) => {
