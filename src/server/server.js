@@ -1,4 +1,7 @@
 import { Scenes, session, Telegraf } from "telegraf";
+import express from 'express';
+const app = express();
+const PORT = process.env.PORT || 3000;
 import { addIncome } from "../controller/userTransactions.js";
 import "dotenv/config";
 
@@ -38,11 +41,23 @@ bot.command("report", (ctx) => {
     NOTE: ${ctx.session.note}`
   );
 });
+
+
+// get server
+app.get('/', (req, res) => {
+  res.send("hello ngrok")
+})
+
+// set endpoint for webhook
+app.use(bot.webhookCallback('/telegram-webhook'));
+
+// set telegram to use webhook's endpoint
+bot.telegram.setWebhook('https://b480-125-164-182-45.ngrok-free.app/telegram-webhook')
+
+app.listen(PORT, () => {
+  console.log(`tunnel is open at ${PORT}`)
+})
 // bot.command("/type-income", (ctx) =>
 //   ctx.reply("What is your income type? e. g passive, active ")
 // );
 // bot.command("/outcome", (ctx) => ctx.reply("What did you spend on today?"));
-
-bot.launch();
-
-console.log("Bot is running on polling...");
